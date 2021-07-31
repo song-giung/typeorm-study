@@ -12,12 +12,12 @@ const init = async () => {
     const userRepository = connection.getRepository(User);
     const photoMetadataRepository = connection.getRepository(PhotoMetadata);
 
-    // const photos = await photoRepository.find({ relations: ["metadata"] });
-    const metadata = await photoMetadataRepository.find({
-      relations: ["photo"],
-    });
+    let photos = await photoRepository
+      .createQueryBuilder("photo")
+      .innerJoinAndSelect("photo.metadata", "metadata")
+      .getMany();
 
-    console.log(metadata);
+    console.log(photos);
   } catch (error) {
     console.log(error);
   }
