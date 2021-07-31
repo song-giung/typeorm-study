@@ -8,16 +8,27 @@ const init = async () => {
   try {
     const connection = await createConnection();
 
-    const photoRepository = connection.getRepository(Photo);
-    const userRepository = connection.getRepository(User);
-    const photoMetadataRepository = connection.getRepository(PhotoMetadata);
+    // create photo obj
+    let photo = new Photo();
+    photo.name = "Me and Bears2";
+    photo.description = "I am near grizzly bears";
+    photo.filename = "photo-with-dangerous-bears.jpg";
+    photo.isPublished = true;
+    photo.views = 1;
 
-    let photos = await photoRepository
-      .createQueryBuilder("photo")
-      .innerJoinAndSelect("photo.metadata", "metadata")
-      .getMany();
+    //create photo metadata obj
+    let metadata = new PhotoMetadata();
+    metadata.height = 800;
+    metadata.width = 400;
+    metadata.compressed = true;
+    metadata.comment = "cybershoot";
+    metadata.orientation = "portrait";
 
-    console.log(photos);
+    photo.metadata = metadata; // connect one to one
+
+    let photoRepository = connection.getRepository(Photo);
+
+    await photoRepository.save(photo); // save photo also save the metadata
   } catch (error) {
     console.log(error);
   }

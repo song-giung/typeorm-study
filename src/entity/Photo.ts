@@ -22,6 +22,8 @@ export class Photo {
   @Column()
   isPublished: boolean;
 
-  @OneToOne((type) => PhotoMetadata, (photoMetadata) => photoMetadata.photo)
+  @OneToOne((type) => PhotoMetadata, (photoMetadata) => photoMetadata.photo, {
+    cascade: true,
+  })
   metadata: PhotoMetadata;
 }
